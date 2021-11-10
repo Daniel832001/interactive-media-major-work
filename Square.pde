@@ -64,6 +64,12 @@ class Square{
       rotation = 0;
     }
   }
+  
+  public void setRandRotation(){
+    int rand = int(random(4));
+    rotation = (rand+1)*90;
+  }
+  
   public float getRotate(){
     return rotation;
   }
