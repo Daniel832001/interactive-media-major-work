@@ -172,22 +172,22 @@ void colour_scheme_2() {
   colourAssignment(orange,purple,pink);
 }
 void colour_scheme_3() {
-  colourAssignment(blue,red,green);
+  colourAssignment(yellow,orange,red);
 }
 void colour_scheme_4() {
-  colourAssignment(blue,red,green);
+  colourAssignment(green,yellow,pink);
 }
 void colour_scheme_5() {
-  colourAssignment(blue,red,green);
+  colourAssignment(black,purple,blue);
 }
 void colour_scheme_6() {
-  colourAssignment(blue,red,green);
+  colourAssignment(red,purple,yellow);
 }
 void colour_scheme_7() {
-  colourAssignment(blue,red,green);
+  colourAssignment(orange,blue,black);
 }
 void colour_scheme_8() {
-  colourAssignment(blue,red,green);
+  colourAssignment(pink,black,green);
 }
 void primary() {
   colourMode = "primary";
