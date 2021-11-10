@@ -26,8 +26,7 @@ float[] firstCorner = {-150, -150};
 float[] secondCorner = {150, 150};
 //float[] firstCorner = {-25,-25};
 //float[] secondCorner = {25,25};
-//float[] adjustments = {-3.25, 3.25};
-float[] adjustments = {-10,10};
+float[] adjustments = {-20,20};
 boolean finished = false;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
