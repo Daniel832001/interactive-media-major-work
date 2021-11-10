@@ -7,8 +7,6 @@ class Square{
   private float rotation;
   private float[] firstCorner = new float[2];
   private float[] secondCorner = new float[2];
-  private float[] thirdCorner = new float[2];
-  private float[] fourthCorner = new float[2];
   private color primary;
   private color secondary;
   private color stroke;
@@ -27,6 +25,25 @@ class Square{
     stroke = color(0,0,0);
   }
   
+  public Square(Square square){    
+    rotation = square.getRotate();
+    firstCorner = square.getFirstCorner();
+    secondCorner = square.getSecondCorner();
+    firstTriangle = square.getFirstTriangle();
+    secondTriangle = square.getSecondTriangle();
+    topLineTriangle = square.getTopLineTriangle();
+    bottomLineTriangle = square.getBottomLineTriangle();
+    primary = square.getPrimary();
+    secondary = square.getSecondary();
+    stroke = square.getStroke();
+  }
+  
+  public float[] getFirstCorner(){
+    return firstCorner;
+  }
+  public float[] getSecondCorner(){
+    return secondCorner;
+  }
   public Triangle getFirstTriangle(){
     return firstTriangle;
   }
@@ -77,8 +94,8 @@ class Square{
   public void setSize(float[] corner1, float[] corner2, float[] adjustments){
     firstTriangle.setSize(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[0],  corner2[0]+adjustments[0],corner1[1]+adjustments[0]);
     secondTriangle.setSize(corner2[0]+adjustments[1],corner2[1]+adjustments[1], corner1[0]+adjustments[1],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[1]);
-    topLineTriangle.setSize(corner2[0],corner2[1], corner1[0],corner2[1],  corner2[0],corner1[1]);
-    bottomLineTriangle.setSize(corner2[0],corner2[1], corner1[0],corner2[1],  corner2[0],corner1[1]);
+    topLineTriangle.setSize(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[0]);
+    bottomLineTriangle.setSize(corner2[0]+adjustments[1],corner2[1]+adjustments[1], corner1[0]+adjustments[0],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[0]);
   }
   
   

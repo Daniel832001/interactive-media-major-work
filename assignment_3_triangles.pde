@@ -4,8 +4,8 @@ import controlP5.*;
 
 //changeable parameters
 float squareSize;
-int numRows = 1;
-int numCols = 4;
+int numRows = 10;
+int numCols = 10;
 //buttons won't change names to reflect different colour but everything else will
 color red = color(255, 0, 0);
 color blue = color(0, 0, 255);
@@ -27,8 +27,9 @@ float[] firstCorner = {-150, -150};
 float[] secondCorner = {150, 150};
 //float[] firstCorner = {-25,-25};
 //float[] secondCorner = {25,25};
-float[] adjustments = {-20,20};
+float[] adjustments = {-20, 20};
 boolean finished = false;
+boolean firstGrid = true;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
 int squareCount = 0;
@@ -61,178 +62,196 @@ void setup() {
   addButtonColours();
   addButtons();  
   background(white);
-    noStroke();
+  noStroke();
 }
 
 void draw() {
 
   if (!finished) {
-    
+
     selectionMenu(); 
     addButtonColours();
-    
   } else {
-    
+
+    noStroke();
+
+    if (firstGrid) {
+      for (int i=0; i<numRows; i++ ) {
+        for (int j=0; j<numCols; j++ ) {
+          grid[i][j].setRandRotation();
+          colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);
+        }
+      }
+      firstGrid = false;
+    }
     grid();
-    strokeWeight(5);
-    for (int i=0; i<squares.length; i++ ) {
-      stroke(squares[i].getStroke()); 
-      fill(squares[i].getPrimary());  
+  }
+}
+
+void selectionMenu() {
+  //inner line - top half
+  pushMatrix();
+  translate(450, 200);
+  rotate(radians(currentSquare.getRotate()));
+  fill(currentSquare.getStroke());
+  triangle(currentSquare.getTopLineTriangle().getx1(), currentSquare.getTopLineTriangle().gety1(), 
+    currentSquare.getTopLineTriangle().getx2(), currentSquare.getTopLineTriangle().gety2(), 
+    currentSquare.getTopLineTriangle().getx3(), currentSquare.getTopLineTriangle().gety3());
+  popMatrix();
+  //inner line - bottom half
+  pushMatrix();
+  translate(450, 200);
+  rotate(radians(currentSquare.getRotate()));
+  fill(currentSquare.getStroke());
+  triangle(currentSquare.getBottomLineTriangle().getx1(), currentSquare.getBottomLineTriangle().gety1(), 
+    currentSquare.getBottomLineTriangle().getx2(), currentSquare.getBottomLineTriangle().gety2(), 
+    currentSquare.getBottomLineTriangle().getx3(), currentSquare.getBottomLineTriangle().gety3());
+  popMatrix();
+
+
+  pushMatrix();
+  translate(450, 200);
+  rotate(radians(currentSquare.getRotate()));    
+  fill(currentSquare.getPrimary());
+  triangle(currentSquare.getFirstTriangle().getx1(), currentSquare.getFirstTriangle().gety1(), 
+    currentSquare.getFirstTriangle().getx2(), currentSquare.getFirstTriangle().gety2(), 
+    currentSquare.getFirstTriangle().getx3(), currentSquare.getFirstTriangle().gety3());
+  popMatrix();
+
+  pushMatrix();
+  translate(450, 200);
+  rotate(radians(currentSquare.getRotate()));
+  fill(currentSquare.getSecondary());
+  triangle(currentSquare.getSecondTriangle().getx1(), currentSquare.getSecondTriangle().gety1(), 
+    currentSquare.getSecondTriangle().getx2(), currentSquare.getSecondTriangle().gety2(), 
+    currentSquare.getSecondTriangle().getx3(), currentSquare.getSecondTriangle().gety3());
+  popMatrix();
+}
+
+void setUpGrid() {
+  for (int i=0; i<numRows; i++ ) {
+    for (int j=0; j<numCols; j++ ) {
+      grid[i][j] = new Square(getSquare());
+      grid[i][j].setRandRotation();
+      colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);
+    }
+  }
+}
+
+Square getSquare() {
+  int rand = int(random(4));
+  return squares[rand];
+}
+
+
+void grid() {
+  int leftSideStart = (900-numCols*50)/2;
+  int topSideStart = (800-numRows*50)/2;
+  int seperator = 58;
+  for (int i=0; i<numRows; i++ ) {
+    for (int j=0; j<numCols; j++ ) {
+
+
+
+
+
+      noStroke();
+      strokeWeight(0);
+
+      //inner line - top half
+      pushMatrix();
+      translate(leftSideStart+seperator*j, topSideStart+seperator*i);
+      rotate(radians(grid[i][j].getRotate()));
+      fill(grid[i][j].getStroke());
+      triangle(grid[i][j].getTopLineTriangle().getx1(), grid[i][j].getTopLineTriangle().gety1(), 
+        grid[i][j].getTopLineTriangle().getx2(), grid[i][j].getTopLineTriangle().gety2(), 
+        grid[i][j].getTopLineTriangle().getx3(), grid[i][j].getTopLineTriangle().gety3());
+      popMatrix();
+      //inner line - bottom half
+      pushMatrix();
+      translate(leftSideStart+seperator*j, topSideStart+seperator*i);
+      rotate(radians(grid[i][j].getRotate()));
+      fill(grid[i][j].getStroke());
+      triangle(grid[i][j].getBottomLineTriangle().getx1(), grid[i][j].getBottomLineTriangle().gety1(), 
+        grid[i][j].getBottomLineTriangle().getx2(), grid[i][j].getBottomLineTriangle().gety2(), 
+        grid[i][j].getBottomLineTriangle().getx3(), grid[i][j].getBottomLineTriangle().gety3());
+      popMatrix();
+
 
       pushMatrix();
-      translate(450+100*i, 200+100*i);
-      rotate(radians(squares[i].getRotate()));
-      triangle(squares[i].getFirstTriangle().getx1(), squares[i].getFirstTriangle().gety1(), 
-        squares[i].getFirstTriangle().getx2(), squares[i].getFirstTriangle().gety2(), 
-        squares[i].getFirstTriangle().getx3(), squares[i].getFirstTriangle().gety3());
+      translate(leftSideStart+seperator*j, topSideStart+seperator*i);
+      rotate(radians(grid[i][j].getRotate()));    
+      fill(grid[i][j].getPrimary());
+      triangle(grid[i][j].getFirstTriangle().getx1(), grid[i][j].getFirstTriangle().gety1(), 
+        grid[i][j].getFirstTriangle().getx2(), grid[i][j].getFirstTriangle().gety2(), 
+        grid[i][j].getFirstTriangle().getx3(), grid[i][j].getFirstTriangle().gety3());
       popMatrix();
 
       pushMatrix();
-      translate(450+100*i, 200+100*i);
-      rotate(radians(squares[i].getRotate()));
-      fill(squares[i].getSecondary());
-      triangle(squares[i].getSecondTriangle().getx1(), squares[i].getSecondTriangle().gety1(), 
-        squares[i].getSecondTriangle().getx2(), squares[i].getSecondTriangle().gety2(), 
-        squares[i].getSecondTriangle().getx3(), squares[i].getSecondTriangle().gety3());
+      translate(leftSideStart+seperator*j, topSideStart+seperator*i);
+      rotate(radians(grid[i][j].getRotate()));
+      fill(grid[i][j].getSecondary());
+      triangle(grid[i][j].getSecondTriangle().getx1(), grid[i][j].getSecondTriangle().gety1(), 
+        grid[i][j].getSecondTriangle().getx2(), grid[i][j].getSecondTriangle().gety2(), 
+        grid[i][j].getSecondTriangle().getx3(), grid[i][j].getSecondTriangle().gety3());
       popMatrix();
     }
   }
 }
 
-void selectionMenu(){
-    //inner line - top half
-    pushMatrix();
-    translate(450, 200);
-    rotate(radians(currentSquare.getRotate()));
-    fill(currentSquare.getStroke());
-    triangle(currentSquare.getTopLineTriangle().getx1(), currentSquare.getTopLineTriangle().gety1(), 
-      currentSquare.getTopLineTriangle().getx2(), currentSquare.getTopLineTriangle().gety2(), 
-      currentSquare.getTopLineTriangle().getx3(), currentSquare.getTopLineTriangle().gety3());
-    popMatrix();
-    //inner line - bottom half
-    pushMatrix();
-    translate(450, 200);
-    rotate(radians(currentSquare.getRotate()));
-    fill(currentSquare.getStroke());
-    triangle(currentSquare.getBottomLineTriangle().getx1(), currentSquare.getBottomLineTriangle().gety1(), 
-      currentSquare.getBottomLineTriangle().getx2(), currentSquare.getBottomLineTriangle().gety2(), 
-      currentSquare.getBottomLineTriangle().getx3(), currentSquare.getBottomLineTriangle().gety3());
-    popMatrix();
 
 
-    pushMatrix();
-    translate(450, 200);
-    rotate(radians(currentSquare.getRotate()));    
-    fill(currentSquare.getPrimary());
-    triangle(currentSquare.getFirstTriangle().getx1(), currentSquare.getFirstTriangle().gety1(), 
-      currentSquare.getFirstTriangle().getx2(), currentSquare.getFirstTriangle().gety2(), 
-      currentSquare.getFirstTriangle().getx3(), currentSquare.getFirstTriangle().gety3());
-    popMatrix();
-
-    pushMatrix();
-    translate(450, 200);
-    rotate(radians(currentSquare.getRotate()));
-    fill(currentSquare.getSecondary());
-    triangle(currentSquare.getSecondTriangle().getx1(), currentSquare.getSecondTriangle().gety1(), 
-      currentSquare.getSecondTriangle().getx2(), currentSquare.getSecondTriangle().gety2(), 
-      currentSquare.getSecondTriangle().getx3(), currentSquare.getSecondTriangle().gety3());
-    popMatrix();
-}
-
-void setUpGrid(){
-    for (int i=0; i<numRows-1; i++ ) {
-      for (int j=0; i<numCols-1; j++ ) {
-        grid[i][j] = getSquare();
-      }
-    }
-}
-
-Square getSquare(){
-   int rand = int(random(4));
-   squares[rand].setRandRotation();
-   colourAssignment(squares[rand].getPrimary(),squares[rand].getSecondary(),squares[rand].getStroke(),squares[rand]);
-   return squares[rand];
-}
-
-
-void grid(){
-    strokeWeight(5);
-    for (int i=0; i<grid.length; i++ ) {
-      stroke(squares[i].getStroke()); 
-      fill(squares[i].getPrimary());  
-
-      pushMatrix();
-      translate(450+100*i, 200+100*i);
-      rotate(radians(squares[i].getRotate()));
-      triangle(squares[i].getFirstTriangle().getx1(), squares[i].getFirstTriangle().gety1(), 
-        squares[i].getFirstTriangle().getx2(), squares[i].getFirstTriangle().gety2(), 
-        squares[i].getFirstTriangle().getx3(), squares[i].getFirstTriangle().gety3());
-      popMatrix();
-
-      pushMatrix();
-      translate(450+100*i, 200+100*i);
-      rotate(radians(squares[i].getRotate()));
-      fill(squares[i].getSecondary());
-      triangle(squares[i].getSecondTriangle().getx1(), squares[i].getSecondTriangle().gety1(), 
-        squares[i].getSecondTriangle().getx2(), squares[i].getSecondTriangle().gety2(), 
-        squares[i].getSecondTriangle().getx3(), squares[i].getSecondTriangle().gety3());
-      popMatrix();
-    }
-}
-
-
-
-void colourAssignment(color color1,color color2,color color3, Square square){
-    int[] rands = {-1,-1,-1};
-    rands[0] = int(random(3));
-    square.setPrimary(getColour(color1,color2,color3,rands[0]));
+void colourAssignment(color color1, color color2, color color3, Square square) {
+  int[] rands = {-1, -1, -1};
+  rands[0] = int(random(3));
+  square.setPrimary(getColour(color1, color2, color3, rands[0]));
+  rands[1] = int(random(3));
+  while (rands[0] == rands[1]) {
     rands[1] = int(random(3));
-    while (rands[0] == rands[1]){
-      rands[1] = int(random(3));
-    }
-    square.setSecondary(getColour(color1,color2,color3,rands[1]));
+  }
+  square.setSecondary(getColour(color1, color2, color3, rands[1]));
+  rands[2] = int(random(3));
+  while (rands[0] == rands[2] || rands[1] == rands[2]) {
     rands[2] = int(random(3));
-    while (rands[0] == rands[2] || rands[1] == rands[2]){
-      rands[2] = int(random(3));
-    }
-    square.setOutline(getColour(color1,color2,color3,rands[2]));
+  }
+  square.setOutline(getColour(color1, color2, color3, rands[2]));
 }
 
-color getColour(color color1,color color2,color color3,int rand){
-  
-    if (rand == 0){
-        return color1;
-    }else if (rand == 1){
-        return color2;
-    }else if (rand == 2){
-        return color3;
-    }
-    return color(246,123,79);
+color getColour(color color1, color color2, color color3, int rand) {
+
+  if (rand == 0) {
+    return color1;
+  } else if (rand == 1) {
+    return color2;
+  } else if (rand == 2) {
+    return color3;
+  }
+  return color(246, 123, 79);
 }
 
 void colour_scheme_1() {
-  colourAssignment(blue,red,green,currentSquare);
+  colourAssignment(blue, red, green, currentSquare);
 }
 void colour_scheme_2() { 
-  colourAssignment(orange,purple,pink,currentSquare);
+  colourAssignment(orange, purple, pink, currentSquare);
 }
 void colour_scheme_3() {
-  colourAssignment(yellow,orange,red,currentSquare);
+  colourAssignment(yellow, orange, red, currentSquare);
 }
 void colour_scheme_4() {
-  colourAssignment(green,yellow,pink,currentSquare);
+  colourAssignment(green, yellow, pink, currentSquare);
 }
 void colour_scheme_5() {
-  colourAssignment(black,purple,blue,currentSquare);
+  colourAssignment(black, purple, blue, currentSquare);
 }
 void colour_scheme_6() {
-  colourAssignment(red,purple,yellow,currentSquare);
+  colourAssignment(red, purple, yellow, currentSquare);
 }
 void colour_scheme_7() {
-  colourAssignment(orange,blue,black,currentSquare);
+  colourAssignment(orange, blue, black, currentSquare);
 }
 void colour_scheme_8() {
-  colourAssignment(pink,black,green,currentSquare);
+  colourAssignment(pink, black, green, currentSquare);
 }
 void primary() {
   colourMode = "primary";
@@ -249,7 +268,7 @@ void rotate() {
 void next() {
   squares[squareCount] = currentSquare;
   squareCount ++;
-  if (squareCount == numRows*numCols) {
+  if (squareCount == 4) {
     squareCount = 0;
     finished = true;
     reset();
@@ -279,81 +298,83 @@ void reset() {
 
   rotateButton.setVisible(false);
   nextButton.setVisible(false);
-  
-  float[] firstCorner = {-25,-25};
-  float[] secondCorner = {25,25};
-  float[] adjustments = {-2,2};
+
+  float[] firstCorner = {-25, -25};
+  float[] secondCorner = {25, 25};
+  //float[] firstCorner = {-100,-100};
+  //float[] secondCorner = {100,100};
+  float[] adjustments = {-3.3, 3.3};
   for (int i=0; i<squares.length; i++ ) {
-    squares[i].setSize(firstCorner,secondCorner,adjustments);
+    squares[i].setSize(firstCorner, secondCorner, adjustments);
   }
   setUpGrid();
 }
 
-void addButtonColours(){
- 
+void addButtonColours() {
+
   //colour scheme 1
   fill(blue);
-  rect(100,450,100,30);
+  rect(100, 450, 100, 30);
   fill(red);
-  rect(100,480,100,30);
+  rect(100, 480, 100, 30);
   fill(green);
-  rect(100,510,100,30);
-  
+  rect(100, 510, 100, 30);
+
   //colour scheme 2
   fill(orange);
-  rect(300,450,100,30);
+  rect(300, 450, 100, 30);
   fill(purple);
-  rect(300,480,100,30);
+  rect(300, 480, 100, 30);
   fill(pink);
-  rect(300,510,100,30);
-  
+  rect(300, 510, 100, 30);
+
   //colour scheme 3
   fill(yellow);
-  rect(500,450,100,30);
+  rect(500, 450, 100, 30);
   fill(orange);
-  rect(500,480,100,30);
+  rect(500, 480, 100, 30);
   fill(red);
-  rect(500,510,100,30);
-  
+  rect(500, 510, 100, 30);
+
   //colour scheme 4
   fill(green);
-  rect(700,450,100,30);
+  rect(700, 450, 100, 30);
   fill(yellow);
-  rect(700,480,100,30);
+  rect(700, 480, 100, 30);
   fill(pink);
-  rect(700,510,100,30);
-  
+  rect(700, 510, 100, 30);
+
   //colour scheme 5
   fill(black);
-  rect(100,650,100,30);
+  rect(100, 650, 100, 30);
   fill(purple);
-  rect(100,680,100,30);
+  rect(100, 680, 100, 30);
   fill(blue);
-  rect(100,710,100,30);
-  
+  rect(100, 710, 100, 30);
+
   //colour scheme 6
   fill(red);
-  rect(300,650,100,30);
+  rect(300, 650, 100, 30);
   fill(purple);
-  rect(300,680,100,30);
+  rect(300, 680, 100, 30);
   fill(yellow);
-  rect(300,710,100,30);
-  
+  rect(300, 710, 100, 30);
+
   //colour scheme 7
   fill(orange);
-  rect(500,650,100,30);
+  rect(500, 650, 100, 30);
   fill(blue);
-  rect(500,680,100,30);
+  rect(500, 680, 100, 30);
   fill(black);
-  rect(500,710,100,30);
-  
+  rect(500, 710, 100, 30);
+
   //colour scheme 8
   fill(pink);
-  rect(700,650,100,30);
+  rect(700, 650, 100, 30);
   fill(black);
-  rect(700,680,100,30);
+  rect(700, 680, 100, 30);
   fill(green);
-  rect(700,710,100,30);
+  rect(700, 710, 100, 30);
 }
 
 
@@ -364,7 +385,7 @@ void addButtonColours(){
 void addButtons() {
   redButton = cp5.addButton("colour_scheme_1")
     .setPosition(100, 430)
-    .setSize(100,20)
+    .setSize(100, 20)
     .setLabelVisible(true)
     .setColorForeground(grey);
   blueButton = cp5.addButton("colour_scheme_2")
