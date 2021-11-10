@@ -4,8 +4,8 @@ import controlP5.*;
 
 //changeable parameters
 float squareSize;
-int numRows = 10;
-int numCols = 10;
+int numRows = 5;
+int numCols = 5;
 //buttons won't change names to reflect different colour but everything else will
 color red = color(255, 0, 0);
 color blue = color(0, 0, 255);
@@ -25,11 +25,8 @@ Square[][] grid = new Square[numRows][numCols];
 
 float[] firstCorner = {-150, -150};
 float[] secondCorner = {150, 150};
-//float[] firstCorner = {-25,-25};
-//float[] secondCorner = {25,25};
 float[] adjustments = {-20, 20};
 boolean finished = false;
-boolean firstGrid = true;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
 int squareCount = 0;
@@ -73,17 +70,6 @@ void draw() {
     addButtonColours();
   } else {
 
-    noStroke();
-
-    if (firstGrid) {
-      for (int i=0; i<numRows; i++ ) {
-        for (int j=0; j<numCols; j++ ) {
-          grid[i][j].setRandRotation();
-          colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);
-        }
-      }
-      firstGrid = false;
-    }
     grid();
   }
 }
@@ -150,11 +136,7 @@ void grid() {
   int seperator = 58;
   for (int i=0; i<numRows; i++ ) {
     for (int j=0; j<numCols; j++ ) {
-
-
-
-
-
+      
       noStroke();
       strokeWeight(0);
 
@@ -292,10 +274,6 @@ void reset() {
   pinkButton.setVisible(false);
   blackButton.setVisible(false);
 
-  //primaryButton.setVisible(false);
-  //secondaryButton.setVisible(false);
-  //outlineButton.setVisible(false);
-
   rotateButton.setVisible(false);
   nextButton.setVisible(false);
 
@@ -378,10 +356,6 @@ void addButtonColours() {
 }
 
 
-
-
-
-
 void addButtons() {
   redButton = cp5.addButton("colour_scheme_1")
     .setPosition(100, 430)
@@ -423,16 +397,6 @@ void addButtons() {
     .setSize(100, 20)
     .setLabelVisible(true)
     .setColorForeground(grey);
-
-  //primaryButton = cp5.addButton("primary")
-  //  .setPosition(100, 100)
-  //  .setSize(100, 20);
-  //secondaryButton = cp5.addButton("secondary")
-  //  .setPosition(100, 200)
-  //  .setSize(100, 20);
-  //outlineButton = cp5.addButton("outline")
-  //  .setPosition(100, 300)
-  //  .setSize(100, 20);
 
   rotateButton = cp5.addButton("rotate")
     .setPosition(700, 100)
