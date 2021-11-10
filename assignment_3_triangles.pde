@@ -57,17 +57,18 @@ void setup() {
   frameRate(60);
   size(900, 800);
   cp5 = new ControlP5(this);
-  addButtons();
-  background(white);  
-  //addColours();
+  addButtonColours();
+  addButtons();  
+  background(white);
+    noStroke();
 }
 
 void draw() {
 
   if (!finished) {
-
-    //stroke(currentSquare.getStroke());  
-    strokeWeight(0);
+    //stroke(currentSquare.getStroke());
+    strokeWeight(0);  
+    addButtonColours();
     
     //inner line - top half
     pushMatrix();
@@ -136,81 +137,57 @@ void draw() {
 }
 
 
+void colourAssignment(color color1,color color2,color color3){
+    int[] rands = {-1,-1,-1};
+    rands[0] = int(random(3));
+    currentSquare.setPrimary(getColour(color1,color2,color3,rands[0]));
+    rands[1] = int(random(3));
+    while (rands[0] == rands[1]){
+      rands[1] = int(random(3));
+    }
+    currentSquare.setSecondary(getColour(color1,color2,color3,rands[1]));
+    rands[2] = int(random(3));
+    while (rands[0] == rands[2] || rands[1] == rands[2]){
+      rands[2] = int(random(3));
+    }
+    currentSquare.setOutline(getColour(color1,color2,color3,rands[2]));
+}
 
+color getColour(color color1,color color2,color color3,int rand){
+  
+    if (rand == 0){
+        return color1;
+    }else if (rand == 1){
+        return color2;
+    }else if (rand == 2){
+        return color3;
+    }
+    return color(246,123,79);
+}
 
-
-
-void red() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(red);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(red);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(red);
-  }
+void colour_scheme_1() {
+  colourAssignment(blue,red,green);
 }
-void blue() { 
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(blue);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(blue);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(blue);
-  }
+void colour_scheme_2() { 
+  colourAssignment(orange,purple,pink);
 }
-void green() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(green);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(green);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(green);
-  }
+void colour_scheme_3() {
+  colourAssignment(blue,red,green);
 }
-void yellow() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(yellow);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(yellow);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(yellow);
-  }
+void colour_scheme_4() {
+  colourAssignment(blue,red,green);
 }
-void purple() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(purple);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(purple);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(purple);
-  }
+void colour_scheme_5() {
+  colourAssignment(blue,red,green);
 }
-void orange() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(orange);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(orange);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(orange);
-  }
+void colour_scheme_6() {
+  colourAssignment(blue,red,green);
 }
-void pink() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(pink);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(pink);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(pink);
-  }
+void colour_scheme_7() {
+  colourAssignment(blue,red,green);
 }
-void black() {
-  if (colourMode.equals("primary")) {
-    currentSquare.setPrimary(black);
-  } else if (colourMode.equals("secondary")) {
-    currentSquare.setSecondary(black);
-  } else if (colourMode.equals("outline")) {
-    currentSquare.setOutline(black);
-  }
+void colour_scheme_8() {
+  colourAssignment(blue,red,green);
 }
 void primary() {
   colourMode = "primary";
@@ -265,7 +242,72 @@ void reset() {
   }
 }
 
-
+void addButtonColours(){
+ 
+  //colour scheme 1
+  fill(blue);
+  rect(100,450,100,30);
+  fill(red);
+  rect(100,480,100,30);
+  fill(green);
+  rect(100,510,100,30);
+  
+  //colour scheme 2
+  fill(orange);
+  rect(300,450,100,30);
+  fill(purple);
+  rect(300,480,100,30);
+  fill(pink);
+  rect(300,510,100,30);
+  
+  //colour scheme 3
+  fill(yellow);
+  rect(500,450,100,30);
+  fill(orange);
+  rect(500,480,100,30);
+  fill(red);
+  rect(500,510,100,30);
+  
+  //colour scheme 4
+  fill(green);
+  rect(700,450,100,30);
+  fill(yellow);
+  rect(700,480,100,30);
+  fill(pink);
+  rect(700,510,100,30);
+  
+  //colour scheme 5
+  fill(black);
+  rect(100,650,100,30);
+  fill(purple);
+  rect(100,680,100,30);
+  fill(blue);
+  rect(100,710,100,30);
+  
+  //colour scheme 6
+  fill(red);
+  rect(300,650,100,30);
+  fill(purple);
+  rect(300,680,100,30);
+  fill(yellow);
+  rect(300,710,100,30);
+  
+  //colour scheme 7
+  fill(orange);
+  rect(500,650,100,30);
+  fill(blue);
+  rect(500,680,100,30);
+  fill(black);
+  rect(500,710,100,30);
+  
+  //colour scheme 8
+  fill(pink);
+  rect(700,650,100,30);
+  fill(black);
+  rect(700,680,100,30);
+  fill(green);
+  rect(700,710,100,30);
+}
 
 
 
@@ -273,53 +315,45 @@ void reset() {
 
 
 void addButtons() {
-  redButton = cp5.addButton("red")
-    .setPosition(100, 450)
-    .setSize(100, 100)
-    .setColorBackground(red)
-    .setLabelVisible(false)
+  redButton = cp5.addButton("colour_scheme_1")
+    .setPosition(100, 430)
+    .setSize(100,20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  blueButton = cp5.addButton("blue")
-    .setPosition(300, 450)
-    .setSize(100, 100)
-    .setColorBackground(blue)
-    .setLabelVisible(false)
+  blueButton = cp5.addButton("colour_scheme_2")
+    .setPosition(300, 430)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  greenButton = cp5.addButton("green")
-    .setPosition(500, 450)
-    .setSize(100, 100)
-    .setColorBackground(green)
-    .setLabelVisible(false)
+  greenButton = cp5.addButton("colour_scheme_3")
+    .setPosition(500, 430)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  yellowButton = cp5.addButton("yellow")
-    .setPosition(700, 450)
-    .setSize(100, 100)
-    .setColorBackground(yellow)
-    .setLabelVisible(false)
+  yellowButton = cp5.addButton("colour_scheme_4")
+    .setPosition(700, 430)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  purpleButton = cp5.addButton("purple")
-    .setPosition(100, 650)
-    .setSize(100, 100)
-    .setColorBackground(purple)
-    .setLabelVisible(false)
+  purpleButton = cp5.addButton("colour_scheme_5")
+    .setPosition(100, 630)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  orangeButton = cp5.addButton("orange")
-    .setPosition(300, 650)
-    .setSize(100, 100)
-    .setColorBackground(orange)
-    .setLabelVisible(false)
+  orangeButton = cp5.addButton("colour_scheme_6")
+    .setPosition(300, 630)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  pinkButton = cp5.addButton("pink")
-    .setPosition(500, 650)
-    .setSize(100, 100)
-    .setColorBackground(pink)
-    .setLabelVisible(false)
+  pinkButton = cp5.addButton("colour_scheme_7")
+    .setPosition(500, 630)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
-  blackButton = cp5.addButton("black")
-    .setPosition(700, 650)
-    .setSize(100, 100)
-    .setColorBackground(black)
-    .setLabelVisible(false)
+  blackButton = cp5.addButton("colour_scheme_8")
+    .setPosition(700, 630)
+    .setSize(100, 20)
+    .setLabelVisible(true)
     .setColorForeground(grey);
 
   primaryButton = cp5.addButton("primary")
