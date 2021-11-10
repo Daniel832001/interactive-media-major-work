@@ -10,6 +10,8 @@ class Square{
   private color primary;
   private color secondary;
   private color stroke;
+  private boolean alive;
+  private boolean giveBirth;
   
   
   public Square(float[] corner1, float[] corner2, float[] adjustments, float rotate){    
@@ -23,6 +25,8 @@ class Square{
     primary = color(0,0,0);
     secondary = color(0,0,0);
     stroke = color(0,0,0);
+    alive = true;
+    giveBirth = false;
   }
   
   public Square(Square square){    
@@ -35,7 +39,9 @@ class Square{
     bottomLineTriangle = square.getBottomLineTriangle();
     primary = square.getPrimary();
     secondary = square.getSecondary();
-    stroke = square.getStroke();
+    stroke = square.getStroke();    
+    alive = true;
+    giveBirth = false;
   }
   
   public float[] getFirstCorner(){
@@ -65,6 +71,15 @@ class Square{
   public color getStroke(){
     return stroke;
   }
+  public boolean getAlive(){
+    return alive;
+  }
+  public boolean getBirth(){
+    return giveBirth;
+  }
+  public float getRotate(){
+    return rotation;
+  }
   public void setPrimary(color colour){
     primary = colour;
   }
@@ -74,23 +89,22 @@ class Square{
   public void setOutline(color colour){
     stroke = colour;
   }
-  
+  public void setAlive(boolean bool){
+    alive = bool;
+  }
+  public void setBirth(boolean bool){
+    giveBirth = bool;
+  }  
   public void setRotate(float rotate){
     rotation += rotate;
     if (rotation == 360){
       rotation = 0;
     }
-  }
-  
+  }  
   public void setRandRotation(){
     int rand = int(random(4));
     rotation = (rand+1)*90;
   }
-  
-  public float getRotate(){
-    return rotation;
-  }
-  
   public void setSize(float[] corner1, float[] corner2, float[] adjustments){
     firstTriangle.setSize(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[0],  corner2[0]+adjustments[0],corner1[1]+adjustments[0]);
     secondTriangle.setSize(corner2[0]+adjustments[1],corner2[1]+adjustments[1], corner1[0]+adjustments[1],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[1]);
@@ -98,6 +112,12 @@ class Square{
     bottomLineTriangle.setSize(corner2[0]+adjustments[1],corner2[1]+adjustments[1], corner1[0]+adjustments[0],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[0]);
   }
   
+  public void kill(){
+    setAlive(false);
+    setPrimary(color(0,0,0));
+    setSecondary(color(0,0,0));
+    setOutline(color(0,0,0));
+  }
   
   
 }

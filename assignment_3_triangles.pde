@@ -27,6 +27,7 @@ float[] firstCorner = {-150, -150};
 float[] secondCorner = {150, 150};
 float[] adjustments = {-20, 20};
 boolean finished = false;
+int timer = 0;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
 int squareCount = 0;
@@ -70,9 +71,113 @@ void draw() {
     addButtonColours();
   } else {
 
-    grid();
+    if (timer < 60*5){
+      //background(white);
+      grid();
+      timer += 1;
+    
+    }else{
+    
+        gameOfLife();
+    
+    }
   }
 }
+
+
+void gameOfLife(){
+ 
+  for (int i=0; i<numRows; i++ ) {
+    for (int j=0; j<numCols; j++ ) {
+      boolean colourDie = true;
+      boolean lineDie = true;
+      if (grid[i][j].getAlive()){
+        if (i > 0){
+          if(colourMatch(grid[i][j],grid[i-1][j],"N")){
+            colourDie = false;
+          }
+          if (j > 0){
+           if(lineMatch(grid[i][j],grid[i-1][j-1],"NW")){
+              lineDie = false;
+            }            
+          }
+          if (j < numCols-1){
+            if(lineMatch(grid[i][j],grid[i-1][j+1],"NE")){
+              lineDie = false;
+            }
+          }
+        }
+        if (i < numRows-1){
+          if(colourMatch(grid[i][j],grid[i+1][j],"S")){
+            colourDie = false;
+          }
+          if (j > 0){
+           if(lineMatch(grid[i][j],grid[i+1][j-1],"SW")){
+              lineDie = false;
+            }            
+          }
+          if (j < numCols-1){
+            if(lineMatch(grid[i][j],grid[i+1][j+1],"SE")){
+              lineDie = false;
+            }
+          }
+        }
+        if (j > 0){
+         if(colourMatch(grid[i][j],grid[i][j-1],"W")){
+            colourDie = false;
+          }
+          if (i > 0){
+           if(lineMatch(grid[i][j],grid[i-1][j-1],"NW")){
+              lineDie = false;
+            }            
+          }
+          if (i < numCols-1){
+            if(lineMatch(grid[i][j],grid[i+1][j-1],"SW")){
+              lineDie = false;
+            }
+          }
+        }
+        if (j < numCols-1){
+          if(colourMatch(grid[i][j],grid[i][j+1],"E")){
+            colourDie = false;
+          }
+          if (i > 0){
+           if(lineMatch(grid[i][j],grid[i-1][j+1],"NE")){
+              lineDie = false;
+            }            
+          }
+          if (i < numCols-1){
+            if(lineMatch(grid[i][j],grid[i+1][j+ 1],"SE")){
+              lineDie = false;
+            }
+          }
+        }
+        
+        if (colourDie && lineDie){
+          grid[i][j].kill();
+        }
+        
+      }
+    
+    }
+  }
+  
+}
+
+
+boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
+ 
+  
+  return false; 
+}
+
+boolean lineMatch(Square mainSquare, Square otherSquare,String direction){
+ 
+  
+  return false; 
+}
+
+
 
 void selectionMenu() {
   //inner line - top half
@@ -131,9 +236,9 @@ Square getSquare() {
 
 
 void grid() {
-  int leftSideStart = (900-numCols*50)/2;
-  int topSideStart = (800-numRows*50)/2;
-  int seperator = 58;
+  float leftSideStart = (900-numCols*50)/2;
+  float topSideStart = (800-numRows*50)/2;
+  float seperator = 56.5;
   for (int i=0; i<numRows; i++ ) {
     for (int j=0; j<numCols; j++ ) {
       
