@@ -28,7 +28,9 @@ float[] secondCorner = {150, 150};
 float[] adjustments = {-20, 20};
 boolean finished = false;
 int timer = 0;
-boolean first2 = true;
+int deathTimer = 0;
+boolean first = true;
+boolean die = true;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments);
 int squareCount = 0;
@@ -76,10 +78,10 @@ void draw() {
     grid();
     timer += 1;
     
-    if (first2 && timer > frameRate*5){
-    
+    if (timer > frameRate*5 || !first){
+        timer = 0;
         gameOfLife();
-        first2 = false;
+        first = false;
     
     }
   }
@@ -87,133 +89,134 @@ void draw() {
 
 
 void gameOfLife(){
- 
-  //death
-  for (int i=0; i<14; i++ ) {
-    for (int j=0; j<16; j++ ) {
-      boolean colourDie = true;
-      //println("i: "+i,"j: "+j);
-      if (grid[i][j].getAlive()){
-        if (i > 0){
-          if(colourMatch(grid[i][j],grid[i-1][j],"N")){
-            colourDie = false;
-          }
-        }
-        if (i < numRows-1){
-          if(colourMatch(grid[i][j],grid[i+1][j],"S")){
-            colourDie = false;
-          }
-        }
-        if (j > 0){
-         if(colourMatch(grid[i][j],grid[i][j-1],"W")){
-            colourDie = false;
-          }
-        }
-        if (j < numCols-1){
-          if(colourMatch(grid[i][j],grid[i][j+1],"E")){
-            colourDie = false;
-          }
-        }
-        
-        if (colourDie){
-          grid[i][j].kill();
-        }
-        
-      }
-    
-    }
-  }
   
-  //birth
-  for (int i=0; i<14; i++ ) {
-    for (int j=0; j<16; j++ ) {
-      
-      //double triangle birth
-      if (grid[i][j].getAlive()){
-        if (i > 0){
-          if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
-            if (j < numCols-1){
-              if (!grid[i][j+1].getAlive()){
-                grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
-                grid[i][j+1].setRandColour();
-                grid[i][j+1].setRandRotation();
-              }
-              if (!grid[i-1][j+1].getAlive()){
-                grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
-                grid[i-1][j+1].setRandColour();
-                grid[i-1][j+1].setRandRotation();
-              }
+  float rate = .5;
+  deathTimer += 1;
+  if (deathTimer > frameRate*rate){
+     die = false;
+  }
+  if (deathTimer >frameRate*rate*2){
+    die = true;
+    deathTimer = 0;
+  }
+ 
+  if (die){
+    //death
+    for (int i=0; i<14; i++ ) {
+      for (int j=0; j<16; j++ ) {
+        boolean colourDie = true;
+        //println("i: "+i,"j: "+j);
+        if (grid[i][j].getAlive()){
+          if (i > 0){
+            if(colourMatch(grid[i][j],grid[i-1][j],"N")){
+              colourDie = false;
             }
-          }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
-            if (j > 0){
-              if (!grid[i][j-1].getAlive()){
-                grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
-                grid[i][j-1].setRandColour();
-                grid[i][j-1].setRandRotation();
-              }
-              if (!grid[i-1][j-1].getAlive()){
-                grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
-                grid[i-1][j-1].setRandColour();
-                grid[i-1][j-1].setRandRotation();
-              }
-            }
-            
           }
-        }
-        //if (i < numRows-1){
-        //  if(triangleBirth(grid[i][j],grid[i+1][j],"E")){
-            
-        //  }else if(triangleBirth(grid[i][j],grid[i+1][j],"W")){
-            
-        //  }
-        //}
-        if (j > 0){
-         if(triangleBirth(grid[i][j],grid[i][j-1],"N")){
-           if (i < numRows-1){
-              if (!grid[i+1][j].getAlive()){
-                grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
-                grid[i+1][j].setRandColour();
-                grid[i+1][j].setRandRotation();
-              }
-              if (!grid[i+1][j-1].getAlive()){
-                grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
-                grid[i+1][j-1].setRandColour();
-                grid[i+1][j-1].setRandRotation();
-              }
+          if (i < 14-1){
+            if(colourMatch(grid[i][j],grid[i+1][j],"S")){
+              colourDie = false;
             }
-         }else if(triangleBirth(grid[i][j],grid[i][j-1],"S")){
-           if (i > 0){
-              if (!grid[i-1][j].getAlive()){
-                grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
-                grid[i-1][j].setRandColour();
-                grid[i-1][j].setRandRotation();
-              }
-              if (!grid[i-1][j-1].getAlive()){
-                grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
-                grid[i-1][j-1].setRandColour();
-                grid[i-1][j-1].setRandRotation();
-              }
+          }
+          if (j > 0){
+           if(colourMatch(grid[i][j],grid[i][j-1],"W")){
+              colourDie = false;
             }
-           
-         }
+          }
+          if (j < 16-1){
+            if(colourMatch(grid[i][j],grid[i][j+1],"E")){
+              colourDie = false;
+            }
+          }
+          
+          if (colourDie){
+            grid[i][j].kill();
+          }
+          
         }
-        //if (j < numCols-1){
-        //  if(triangleBirth(grid[i][j],grid[i][j+1],"N")){
-            
-        //  }else if(triangleBirth(grid[i][j],grid[i][j+1],"S")){
-            
-        //  }
-        //}
+      
+      }
+    }
+  }else{
+  
+    //birth
+    for (int i=0; i<14; i++ ) {
+      for (int j=0; j<16; j++ ) {
         
-        //if (colourDie){
-        //  grid[i][j].kill();
-        //}
         
+        if (grid[i][j].getAlive()){
+          
+          
+          //double triangle birth
+          if (i > 0){
+            if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
+              if (j < 16-1){
+                if (!grid[i][j+1].getAlive()){
+                  grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i][j+1].setRandColour();
+                  grid[i][j+1].setRandRotation();
+                }
+                if (!grid[i-1][j+1].getAlive()){
+                  grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j+1].setRandColour();
+                  grid[i-1][j+1].setRandRotation();
+                }
+              }
+            }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
+              if (j > 0){
+                if (!grid[i][j-1].getAlive()){
+                  grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i][j-1].setRandColour();
+                  grid[i][j-1].setRandRotation();
+                }
+                if (!grid[i-1][j-1].getAlive()){
+                  grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j-1].setRandColour();
+                  grid[i-1][j-1].setRandRotation();
+                }
+              }
+              
+            }
+          }
+          if (j > 0){
+           if(triangleBirth(grid[i][j],grid[i][j-1],"S")){
+             if (i < 14-1){
+                if (!grid[i+1][j].getAlive()){
+                  grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                  grid[i+1][j].setRandColour();
+                  grid[i+1][j].setRandRotation();
+                }
+                if (!grid[i+1][j-1].getAlive()){
+                  grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                  grid[i+1][j-1].setRandColour();
+                  grid[i+1][j-1].setRandRotation();
+                }
+              }
+           }else if(triangleBirth(grid[i][j],grid[i][j-1],"N")){
+             if (i > 0){
+                if (!grid[i-1][j].getAlive()){
+                  grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                  grid[i-1][j].setRandColour();
+                  grid[i-1][j].setRandRotation();
+                }
+                if (!grid[i-1][j-1].getAlive()){
+                  grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                  grid[i-1][j-1].setRandColour();
+                  grid[i-1][j-1].setRandRotation();
+                }
+              }
+             
+           }
+          }   
+          
+          //diagonal line birth
+          
+          
+        }
       }
       
       
       
-      //diagonal line birth
+      
       
       
     }
