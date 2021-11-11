@@ -88,6 +88,7 @@ void draw() {
 
 void gameOfLife(){
  
+  //death
   for (int i=0; i<14; i++ ) {
     for (int j=0; j<16; j++ ) {
       boolean colourDie = true;
@@ -123,7 +124,95 @@ void gameOfLife(){
     }
   }
   
+  //birth
+  for (int i=0; i<14; i++ ) {
+    for (int j=0; j<16; j++ ) {
+      
+      //double triangle birth
+      if (grid[i][j].getAlive()){
+        if (i > 0){
+          if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
+            
+          }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
+            
+          }
+        }
+        //if (i < numRows-1){
+        //  if(triangleBirth(grid[i][j],grid[i+1][j],"E")){
+            
+        //  }else if(triangleBirth(grid[i][j],grid[i+1][j],"W")){
+            
+        //  }
+        //}
+        if (j > 0){
+         if(triangleBirth(grid[i][j],grid[i][j-1],"N")){
+           
+         }else if(triangleBirth(grid[i][j],grid[i][j-1],"S")){
+           
+         }
+        }
+        //if (j < numCols-1){
+        //  if(triangleBirth(grid[i][j],grid[i][j+1],"N")){
+            
+        //  }else if(triangleBirth(grid[i][j],grid[i][j+1],"S")){
+            
+        //  }
+        //}
+        
+        //if (colourDie){
+        //  grid[i][j].kill();
+        //}
+        
+      }
+      
+      
+      
+      //diagonal line birth
+      
+      
+    }
+  }
+  
+  
+  
+  
+  
 }
+
+boolean triangleBirth(Square rightSquare, Square leftSquare, String direction){
+  
+  color rightColour = color(0,0,0);
+  color leftColour = color(0,0,1);
+  switch(direction){
+    case "N":
+      if ((rightSquare.getRotate() == 0 || rightSquare.getRotate() == 180) && (leftSquare.getRotate() == 90 || leftSquare.getRotate() == 270)){
+        if (rightSquare.getRotate() == 0){
+          rightColour = rightSquare.getPrimary();
+        }else{
+          rightColour = rightSquare.getSecondary();
+        }
+        
+        if (leftSquare.getRotate() == 90){
+          leftColour = leftSquare.getPrimary();
+        }else{
+          leftColour = leftSquare.getSecondary();
+        }
+      }
+      break;
+    case "S":
+      break;
+    case "E":
+      break;
+    case "W":
+      break;
+  }
+  
+  
+  return false;
+}
+
+
+
 
 
 boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
