@@ -8,6 +8,8 @@ float squareSize;
 //determines number of squares at beggining of death/life cycle
 int numRows = 10;//max 14
 int numCols = 10;//max 16
+//volume of audio
+float volume = 0.5;
 //rate of death/life cycle in seconds
 float rate = .5;
 //buttons won't change names to reflect different colour but everything else will
@@ -36,10 +38,12 @@ int deathTimer = 0;
 boolean first = true;
 boolean die = true;
 boolean permaDead = false;
+int music = 0;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments);
 int squareCount = 0;
 
+//interaction points
 Button redButton;
 Button blueButton;
 Button greenButton;
@@ -60,6 +64,14 @@ Button nextButton;
 ControlP5 cp5;
 
 
+//audio
+AudioContext ac;
+WavePlayer wp;
+Gain g;
+Glide gainGlide;
+Glide frequencyGlide;
+
+
 
 void setup() {
   frameRate(60);
@@ -69,6 +81,14 @@ void setup() {
   addButtons();  
   background(white);
   noStroke();
+  ac = new AudioContext();
+  gainGlide = new Glide(ac, volume, 50);
+  frequencyGlide = new Glide(ac, 20, 50);
+  wp = new WavePlayer(ac,frequencyGlide,Buffer.SINE);
+  g = new Gain(ac,1,gainGlide);
+  g.addInput(wp);
+  ac.out.addInput(g);
+  ac.start();
 }
 
 void draw() {
@@ -91,7 +111,11 @@ void draw() {
     }
     
     if (permaDead){
-     println("PLAY SOUND"); 
+      stroke(150,150,150);
+      strokeWeight(3);
+      line(music,0,music,900);
+      frequencyGlide.setValue(mouseY);
+      music++;
     }
   }
 }
