@@ -4,7 +4,7 @@ class Square{
   private Triangle secondTriangle;
   private Triangle topLineTriangle;
   private Triangle bottomLineTriangle;
-  private float rotation;
+  private int rotation;
   private float[] firstCorner = new float[2];
   private float[] secondCorner = new float[2];
   private color primary;
@@ -14,8 +14,8 @@ class Square{
   private boolean giveBirth;
   
   
-  public Square(float[] corner1, float[] corner2, float[] adjustments, float rotate){    
-    rotation = rotate;
+  public Square(float[] corner1, float[] corner2, float[] adjustments){    
+    rotation = 0;
     firstCorner = corner1;
     secondCorner = corner2;
     firstTriangle = new Triangle(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[0],  corner2[0]+adjustments[0],corner1[1]+adjustments[0]);
@@ -77,7 +77,7 @@ class Square{
   public boolean getBirth(){
     return giveBirth;
   }
-  public float getRotate(){
+  public int getRotate(){
     return rotation;
   }
   public void setPrimary(color colour){
@@ -103,7 +103,7 @@ class Square{
   }  
   public void setRandRotation(){
     int rand = int(random(4));
-    rotation = (rand+1)*90;
+    rotation = (rand)*90;
   }
   public void setSize(float[] corner1, float[] corner2, float[] adjustments){
     firstTriangle.setSize(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[0],  corner2[0]+adjustments[0],corner1[1]+adjustments[0]);
@@ -114,9 +114,9 @@ class Square{
   
   public void kill(){
     setAlive(false);
-    setPrimary(color(0,0,0));
-    setSecondary(color(0,0,0));
-    setOutline(color(0,0,0));
+    setPrimary(color(255,255,255));
+    setSecondary(color(255,255,255));
+    setOutline(color(255,255,255));
   }
   
   

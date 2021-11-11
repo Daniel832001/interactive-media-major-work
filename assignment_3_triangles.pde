@@ -4,8 +4,8 @@ import controlP5.*;
 
 //changeable parameters
 float squareSize;
-int numRows = 5;
-int numCols = 5;
+int numRows = 10;
+int numCols = 10;
 //buttons won't change names to reflect different colour but everything else will
 color red = color(255, 0, 0);
 color blue = color(0, 0, 255);
@@ -28,8 +28,9 @@ float[] secondCorner = {150, 150};
 float[] adjustments = {-20, 20};
 boolean finished = false;
 int timer = 0;
+boolean first2 = true;
 
-Square currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
+Square currentSquare = new Square(firstCorner, secondCorner, adjustments);
 int squareCount = 0;
 
 Button redButton;
@@ -71,14 +72,14 @@ void draw() {
     addButtonColours();
   } else {
 
-    if (timer < 60*5){
-      //background(white);
-      grid();
-      timer += 1;
+    //background(white);
+    grid();
+    timer += 1;
     
-    }else{
+    if (timer > 60*5 && first2){
     
         gameOfLife();
+        first2 = false;
     
     }
   }
@@ -91,6 +92,7 @@ void gameOfLife(){
     for (int j=0; j<numCols; j++ ) {
       boolean colourDie = true;
       boolean lineDie = true;
+      //println("i: "+i,"j: "+j);
       if (grid[i][j].getAlive()){
         if (i > 0){
           if(colourMatch(grid[i][j],grid[i-1][j],"N")){
@@ -167,60 +169,57 @@ void gameOfLife(){
 
 boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
   
-  color mainColor;
-  color otherColour;
+  color mainColour = color(0,0,0);
+  color otherColour = color(0,0,1);
   switch(direction){
     case "N":
       
       if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 90){
-        mainColor = mainSquare.getPrimary();
+        mainColour = mainSquare.getPrimary();
       }else{
-        mainColor = mainSquare.getSecondary();
+        mainColour = mainSquare.getSecondary();
       }
       
       if (otherSquare.getRotate() == 180 || otherSquare.getRotate() == 270){
         otherColour = otherSquare.getPrimary();
       }else{
         otherColour = otherSquare.getSecondary();
-      }      
-      
+      }   
       break;
     case "S":
       
       if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 90){
-        mainColor = mainSquare.getSecondary();
+        mainColour = mainSquare.getSecondary();
       }else{
-        mainColor = mainSquare.getPrimary();
+        mainColour = mainSquare.getPrimary();
       }
       
       if (otherSquare.getRotate() == 180 || otherSquare.getRotate() == 270){
         otherColour = otherSquare.getSecondary();
       }else{
         otherColour = otherSquare.getPrimary();
-      }      
-      
+      }   
       break;
     case "W":
       
       if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 270){
-        mainColor = mainSquare.getPrimary();
+        mainColour = mainSquare.getPrimary();
       }else{
-        mainColor = mainSquare.getSecondary();
+        mainColour = mainSquare.getSecondary();
       }
       
       if (otherSquare.getRotate() == 90 || otherSquare.getRotate() == 180){
         otherColour = otherSquare.getPrimary();
       }else{
         otherColour = otherSquare.getSecondary();
-      }      
-      
+      } 
       break;
     case "E":
       
       if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 270){
-        mainColor = mainSquare.getSecondary();
+        mainColour = mainSquare.getSecondary();
       }else{
-        mainColor = mainSquare.getPrimary();
+        mainColour = mainSquare.getPrimary();
       }
       
       if (otherSquare.getRotate() == 90 || otherSquare.getRotate() == 180){
@@ -228,25 +227,58 @@ boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
       }else{
         otherColour = otherSquare.getPrimary();
       }     
-      
-      break;
+      break;  
   }
+  //println("Direction: "+direction,"main: "+mainColour,"other: "+otherColour);
+  if (mainColour == otherColour){
+    return true;
+  }
+  
   
   return false; 
 }
 
 boolean lineMatch(Square mainSquare, Square otherSquare,String direction){
- 
-  switch(direction){
-    case "NE":
-      break;
-    case "NW":
-      break;
-    case "SW":
-      break;
-    case "SE":
-      break;
-  }
+
+  
+  //if(mainSquare.getRotate() == 0 || mainSquare.getRotate() == 180){
+  //  switch(direction){
+  //    case "NE":
+  //      if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
+  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
+  //          return true;            
+  //        }
+  //      }
+  //      break;
+  //    case "SW":
+  //      if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
+  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
+  //          return true;            
+  //        }
+  //      }
+  //      break;
+  //  }
+  //}
+  
+  //if(mainSquare.getRotate() == 90 || mainSquare.getRotate() == 270){
+  //  switch(direction){
+  //    case "NW":
+  //      if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
+  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
+  //          return true;            
+  //        }
+  //      }      
+  //      break;
+  //    case "SE":
+  //      if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
+  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
+  //          return true;            
+  //        }
+  //      }
+  //      break;
+  //  }
+  //}
+  
   return false; 
 }
 
@@ -436,7 +468,7 @@ void next() {
     reset();
   }
   if (squares[squareCount] == null) {
-    currentSquare = new Square(firstCorner, secondCorner, adjustments, 0);
+    currentSquare = new Square(firstCorner, secondCorner, adjustments);
   } else {
     currentSquare = squares[squareCount];
   }
