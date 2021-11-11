@@ -35,6 +35,7 @@ int timer = 0;
 int deathTimer = 0;
 boolean first = true;
 boolean die = true;
+boolean permaDead = false;
 
 Square currentSquare = new Square(firstCorner, secondCorner, adjustments);
 int squareCount = 0;
@@ -82,11 +83,15 @@ void draw() {
     grid();
     timer += 1;
     
-    if (timer > frameRate*5 || !first){
+    if ((timer > frameRate*5 || !first)){
         timer = 0;
         gameOfLife();
         first = false;
     
+    }
+    
+    if (permaDead){
+     println("PLAY SOUND"); 
     }
   }
 }
@@ -103,7 +108,13 @@ void gameOfLife(){
     die = true;
     deathTimer = 0;
   }
- 
+  
+  if (deathTimer == 0){
+    permaDead = true;    
+  }
+  
+  
+  
   if (die){
     //death
     for (int i=0; i<14; i++ ) {
@@ -134,6 +145,7 @@ void gameOfLife(){
           
           if (colourDie){
             grid[i][j].kill();
+            permaDead = false;
           }
           
         }
@@ -150,7 +162,7 @@ void gameOfLife(){
         if (grid[i][j].getAlive()){
           
           
-          double triangle birth
+          //double triangle birth
           if (i > 0){
             if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
               if (j < 16-1){
@@ -158,11 +170,13 @@ void gameOfLife(){
                   grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i][j+1].setRandColour();
                   grid[i][j+1].setRandRotation();
+                  permaDead = false;
                 }
                 if (!grid[i-1][j+1].getAlive()){
                   grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j+1].setRandColour();
                   grid[i-1][j+1].setRandRotation();
+                  permaDead = false;
                 }
               }
             }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
@@ -171,11 +185,13 @@ void gameOfLife(){
                   grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i][j-1].setRandColour();
                   grid[i][j-1].setRandRotation();
+                  permaDead = false;
                 }
                 if (!grid[i-1][j-1].getAlive()){
                   grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j-1].setRandColour();
                   grid[i-1][j-1].setRandRotation();
+                  permaDead = false;
                 }
               }
               
@@ -188,11 +204,13 @@ void gameOfLife(){
                   grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
                   grid[i+1][j].setRandColour();
                   grid[i+1][j].setRandRotation();
+                  permaDead = false;
                 }
                 if (!grid[i+1][j-1].getAlive()){
                   grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
                   grid[i+1][j-1].setRandColour();
                   grid[i+1][j-1].setRandRotation();
+                  permaDead = false;
                 }
               }
            }else if(triangleBirth(grid[i][j],grid[i][j-1],"N")){
@@ -201,11 +219,13 @@ void gameOfLife(){
                   grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
                   grid[i-1][j].setRandColour();
                   grid[i-1][j].setRandRotation();
+                  permaDead = false;
                 }
                 if (!grid[i-1][j-1].getAlive()){
                   grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
                   grid[i-1][j-1].setRandColour();
                   grid[i-1][j-1].setRandRotation();
+                  permaDead = false;
                 }
               }
              
@@ -226,6 +246,7 @@ void gameOfLife(){
                   grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i][j+1].setRandColour();
                   grid[i][j+1].setRandRotation();
+                  permaDead = false;
                 }
               }
             
@@ -234,6 +255,7 @@ void gameOfLife(){
                   grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j+1].setRandColour();
                   grid[i-1][j+1].setRandRotation();
+                  permaDead = false;
                 }
               }
             }
@@ -243,6 +265,7 @@ void gameOfLife(){
                   grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i][j-1].setRandColour();
                   grid[i][j-1].setRandRotation();
+                  permaDead = false;
                 }
               }
             
@@ -251,6 +274,7 @@ void gameOfLife(){
                   grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j-1].setRandColour();
                   grid[i-1][j-1].setRandRotation();
+                  permaDead = false;
                 }             
               } 
             }
@@ -262,6 +286,7 @@ void gameOfLife(){
                   grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i+1][j].setRandColour();
                   grid[i+1][j].setRandRotation();
+                  permaDead = false;
                 }
              }
            
@@ -270,6 +295,7 @@ void gameOfLife(){
                   grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i+1][j-1].setRandColour();
                   grid[i+1][j-1].setRandRotation();
+                  permaDead = false;
                 }
              }
            }
@@ -279,6 +305,7 @@ void gameOfLife(){
                   grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j].setRandColour();
                   grid[i-1][j].setRandRotation();
+                  permaDead = false;
                 }
              }
              if(diagonalBirth(grid[i][j],grid[i][j-1],"NW")){
@@ -286,6 +313,7 @@ void gameOfLife(){
                   grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
                   grid[i-1][j-1].setRandColour();
                   grid[i-1][j-1].setRandRotation();
+                  permaDead = false;
                 }
              } 
            }
