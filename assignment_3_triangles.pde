@@ -4,8 +4,8 @@ import controlP5.*;
 
 //changeable parameters
 float squareSize;
-int numRows = 10;
-int numCols = 10;
+int numRows = 10;//max 14
+int numCols = 10;//max 16
 //buttons won't change names to reflect different colour but everything else will
 color red = color(255, 0, 0);
 color blue = color(0, 0, 255);
@@ -21,7 +21,7 @@ String colourMode = "primary";//options "primary","secondary","outline"
 
 //non-changeable parameters
 Square[] squares = new Square[4];
-Square[][] grid = new Square[numRows][numCols];
+Square[][] grid = new Square[14][16];
 
 float[] firstCorner = {-150, -150};
 float[] secondCorner = {150, 150};
@@ -56,7 +56,7 @@ ControlP5 cp5;
 
 void setup() {
   frameRate(60);
-  size(900, 800);
+  size(900, 785);
   cp5 = new ControlP5(this);
   addButtonColours();
   addButtons();  
@@ -76,7 +76,7 @@ void draw() {
     grid();
     timer += 1;
     
-    if (timer > 60*5 && first2){
+    if (first2 && timer > 60*5){
     
         gameOfLife();
         first2 = false;
@@ -88,74 +88,33 @@ void draw() {
 
 void gameOfLife(){
  
-  for (int i=0; i<numRows; i++ ) {
-    for (int j=0; j<numCols; j++ ) {
+  for (int i=0; i<14; i++ ) {
+    for (int j=0; j<16; j++ ) {
       boolean colourDie = true;
-      boolean lineDie = true;
       //println("i: "+i,"j: "+j);
       if (grid[i][j].getAlive()){
         if (i > 0){
           if(colourMatch(grid[i][j],grid[i-1][j],"N")){
             colourDie = false;
           }
-          if (j > 0){
-           if(lineMatch(grid[i][j],grid[i-1][j-1],"NW")){
-              lineDie = false;
-            }            
-          }
-          if (j < numCols-1){
-            if(lineMatch(grid[i][j],grid[i-1][j+1],"NE")){
-              lineDie = false;
-            }
-          }
         }
         if (i < numRows-1){
           if(colourMatch(grid[i][j],grid[i+1][j],"S")){
             colourDie = false;
-          }
-          if (j > 0){
-           if(lineMatch(grid[i][j],grid[i+1][j-1],"SW")){
-              lineDie = false;
-            }            
-          }
-          if (j < numCols-1){
-            if(lineMatch(grid[i][j],grid[i+1][j+1],"SE")){
-              lineDie = false;
-            }
           }
         }
         if (j > 0){
          if(colourMatch(grid[i][j],grid[i][j-1],"W")){
             colourDie = false;
           }
-          if (i > 0){
-           if(lineMatch(grid[i][j],grid[i-1][j-1],"NW")){
-              lineDie = false;
-            }            
-          }
-          if (i < numCols-1){
-            if(lineMatch(grid[i][j],grid[i+1][j-1],"SW")){
-              lineDie = false;
-            }
-          }
         }
         if (j < numCols-1){
           if(colourMatch(grid[i][j],grid[i][j+1],"E")){
             colourDie = false;
           }
-          if (i > 0){
-           if(lineMatch(grid[i][j],grid[i-1][j+1],"NE")){
-              lineDie = false;
-            }            
-          }
-          if (i < numCols-1){
-            if(lineMatch(grid[i][j],grid[i+1][j+ 1],"SE")){
-              lineDie = false;
-            }
-          }
         }
         
-        if (colourDie && lineDie){
+        if (colourDie){
           grid[i][j].kill();
         }
         
@@ -231,48 +190,13 @@ boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
   }
   //println("Direction: "+direction,"main: "+mainColour,"other: "+otherColour);
   if (mainColour == otherColour){
-    //return true;
+    return true;
   }
   
   
   return false; 
 }
 
-boolean lineMatch(Square mainSquare, Square otherSquare,String direction){
-
-  
-  if(mainSquare.getRotate() == 0 || mainSquare.getRotate() == 180){
-    switch(direction){
-      case "NE":
-        if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
-          return true; 
-        }
-        break;
-      case "SW":
-        if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
-          return true; 
-        }
-        break;
-    }
-  }
-  
-  if(mainSquare.getRotate() == 90 || mainSquare.getRotate() == 270){
-    switch(direction){
-      case "NW":
-        if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
-          return true; 
-        }      
-        break;
-      case "SE":
-        if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
-          return true; 
-        }
-        break;
-    }
-  }
-  
-  return false; 
-}
 
 
 
@@ -317,11 +241,18 @@ void selectionMenu() {
 }
 
 void setUpGrid() {
-  for (int i=0; i<numRows; i++ ) {
-    for (int j=0; j<numCols; j++ ) {
-      grid[i][j] = new Square(getSquare());
-      grid[i][j].setRandRotation();
-      colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);
+  int topGap = (14-numRows)/2;
+  int sideGap =  (16-numCols)/2;
+  for (int i=0; i<14; i++ ) {
+    for (int j=0; j<16; j++ ) {
+      if (i >= topGap && i < numRows+topGap && j >= sideGap && j < numCols+sideGap){
+        grid[i][j] = new Square(getSquare());
+        grid[i][j].setRandRotation();
+        colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);      
+      }else{
+       grid[i][j] = new Square(getSquare()); 
+       grid[i][j].kill();
+      }
     }
   }
 }
@@ -333,11 +264,13 @@ Square getSquare() {
 
 
 void grid() {
-  float leftSideStart = (900-numCols*50)/2;
-  float topSideStart = (800-numRows*50)/2;
+  //float leftSideStart = (900-numCols*50)/2;
+  float leftSideStart = 25;
+  //float topSideStart = (800-numRows*50)/2;
+  float topSideStart = 25;
   float seperator = 56.5;
-  for (int i=0; i<numRows; i++ ) {
-    for (int j=0; j<numCols; j++ ) {
+  for (int i=0; i<14; i++ ) {
+    for (int j=0; j<16; j++ ) {
       
       noStroke();
       strokeWeight(0);

@@ -40,8 +40,8 @@ class Square{
     primary = square.getPrimary();
     secondary = square.getSecondary();
     stroke = square.getStroke();    
-    alive = true;
-    giveBirth = false;
+    alive = square.getAlive();
+    giveBirth = square.getBirth();
   }
   
   public float[] getFirstCorner(){
