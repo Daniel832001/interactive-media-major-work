@@ -166,14 +166,87 @@ void gameOfLife(){
 
 
 boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
- 
+  
+  color mainColor;
+  color otherColour;
+  switch(direction){
+    case "N":
+      
+      if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 90){
+        mainColor = mainSquare.getPrimary();
+      }else{
+        mainColor = mainSquare.getSecondary();
+      }
+      
+      if (otherSquare.getRotate() == 180 || otherSquare.getRotate() == 270){
+        otherColour = otherSquare.getPrimary();
+      }else{
+        otherColour = otherSquare.getSecondary();
+      }      
+      
+      break;
+    case "S":
+      
+      if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 90){
+        mainColor = mainSquare.getSecondary();
+      }else{
+        mainColor = mainSquare.getPrimary();
+      }
+      
+      if (otherSquare.getRotate() == 180 || otherSquare.getRotate() == 270){
+        otherColour = otherSquare.getSecondary();
+      }else{
+        otherColour = otherSquare.getPrimary();
+      }      
+      
+      break;
+    case "W":
+      
+      if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 270){
+        mainColor = mainSquare.getPrimary();
+      }else{
+        mainColor = mainSquare.getSecondary();
+      }
+      
+      if (otherSquare.getRotate() == 90 || otherSquare.getRotate() == 180){
+        otherColour = otherSquare.getPrimary();
+      }else{
+        otherColour = otherSquare.getSecondary();
+      }      
+      
+      break;
+    case "E":
+      
+      if (mainSquare.getRotate() == 0 || mainSquare.getRotate() == 270){
+        mainColor = mainSquare.getSecondary();
+      }else{
+        mainColor = mainSquare.getPrimary();
+      }
+      
+      if (otherSquare.getRotate() == 90 || otherSquare.getRotate() == 180){
+        otherColour = otherSquare.getSecondary();
+      }else{
+        otherColour = otherSquare.getPrimary();
+      }     
+      
+      break;
+  }
   
   return false; 
 }
 
 boolean lineMatch(Square mainSquare, Square otherSquare,String direction){
  
-  
+  switch(direction){
+    case "NE":
+      break;
+    case "NW":
+      break;
+    case "SW":
+      break;
+    case "SE":
+      break;
+  }
   return false; 
 }
 
@@ -316,6 +389,8 @@ color getColour(color color1, color color2, color color3, int rand) {
   return color(246, 123, 79);
 }
 
+
+//BUTTONS
 void colour_scheme_1() {
   colourAssignment(blue, red, green, currentSquare);
 }
