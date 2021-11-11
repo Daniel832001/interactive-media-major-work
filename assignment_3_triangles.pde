@@ -3,9 +3,13 @@ import java.util.Arrays;
 import controlP5.*;
 
 //changeable parameters
+
 float squareSize;
+//determines number of squares at beggining of death/life cycle
 int numRows = 10;//max 14
 int numCols = 10;//max 16
+//rate of death/life cycle in seconds
+float rate = .5;
 //buttons won't change names to reflect different colour but everything else will
 color red = color(255, 0, 0);
 color blue = color(0, 0, 255);
@@ -90,7 +94,7 @@ void draw() {
 
 void gameOfLife(){
   
-  float rate = .5;
+  
   deathTimer += 1;
   if (deathTimer > frameRate*rate){
      die = false;
@@ -146,7 +150,7 @@ void gameOfLife(){
         if (grid[i][j].getAlive()){
           
           
-          //double triangle birth
+          double triangle birth
           if (i > 0){
             if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
               if (j < 16-1){
@@ -208,18 +212,92 @@ void gameOfLife(){
            }
           }   
           
+          
+          
+          
+          
+          
+          
           //diagonal line birth
+          if (i > 0){
+            if (j < 16-1){
+              if(diagonalBirth(grid[i][j],grid[i-1][j],"ES")){              
+                if (!grid[i][j+1].getAlive()){
+                  grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i][j+1].setRandColour();
+                  grid[i][j+1].setRandRotation();
+                }
+              }
+            
+              if(diagonalBirth(grid[i][j],grid[i-1][j],"EN")){
+                if (!grid[i-1][j+1].getAlive()){
+                  grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j+1].setRandColour();
+                  grid[i-1][j+1].setRandRotation();
+                }
+              }
+            }
+            if (j > 0){
+              if(diagonalBirth(grid[i][j],grid[i-1][j],"WS")){                
+                if (!grid[i][j-1].getAlive()){                  
+                  grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i][j-1].setRandColour();
+                  grid[i][j-1].setRandRotation();
+                }
+              }
+            
+              if(diagonalBirth(grid[i][j],grid[i-1][j],"WN")){
+                if (!grid[i-1][j-1].getAlive()){
+                  grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j-1].setRandColour();
+                  grid[i-1][j-1].setRandRotation();
+                }             
+              } 
+            }
+          }
+          if (j > 0){
+            if (i < 14-1){
+             if(diagonalBirth(grid[i][j],grid[i][j-1],"SE")){             
+                if (!grid[i+1][j].getAlive()){
+                  grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i+1][j].setRandColour();
+                  grid[i+1][j].setRandRotation();
+                }
+             }
+           
+             if(diagonalBirth(grid[i][j],grid[i][j-1],"SW")){
+                if (!grid[i+1][j-1].getAlive()){
+                  grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i+1][j-1].setRandColour();
+                  grid[i+1][j-1].setRandRotation();
+                }
+             }
+           }
+           if (i > 0){
+             if(diagonalBirth(grid[i][j],grid[i][j-1],"NE")){             
+                if (!grid[i-1][j].getAlive()){
+                  grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j].setRandColour();
+                  grid[i-1][j].setRandRotation();
+                }
+             }
+             if(diagonalBirth(grid[i][j],grid[i][j-1],"NW")){
+                if (!grid[i-1][j-1].getAlive()){
+                  grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                  grid[i-1][j-1].setRandColour();
+                  grid[i-1][j-1].setRandRotation();
+                }
+             } 
+           }
+          }   
           
           
         }
+        
+        
       }
-      
-      
-      
-      
-      
-      
     }
+    
   }
   
 }
@@ -229,7 +307,139 @@ Square getParentSquare(Square[] parents){
   return parents[rand];
 }
 
-
+boolean diagonalBirth(Square firstSquare, Square backSquare, String direction){
+  
+  color firstColour = color(0,0,0);
+  color backColour = color(0,0,1);
+  switch(direction){
+    case "EN":
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if(firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        } 
+      }
+      break;
+    case "ES":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+         if(firstSquare.getRotate() == 90){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 270){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }
+      }
+      break;
+    case "WN":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+         if(firstSquare.getRotate() == 90){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 270){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }
+      }
+      break;
+    case "WS":
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if(firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        } 
+      }
+      break;
+    case "NW":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+         if(firstSquare.getRotate() == 270){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 90){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }        
+      }
+      break;
+    case "NE":
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if(firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        } 
+      }
+      break;
+    case "SW":
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if(firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        } 
+      }
+      break;
+    case "SE":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+         if(firstSquare.getRotate() == 270){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 90){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }        
+      }
+      break;
+  }
+  
+  if (firstColour == backColour){
+    return true;
+  }
+  
+  return false;
+}
 
 
 boolean triangleBirth(Square firstSquare, Square backSquare, String direction){
