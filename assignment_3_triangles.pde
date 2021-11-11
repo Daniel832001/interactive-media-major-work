@@ -76,7 +76,7 @@ void draw() {
     grid();
     timer += 1;
     
-    if (first2 && timer > 60*5){
+    if (first2 && timer > frameRate*5){
     
         gameOfLife();
         first2 = false;
@@ -132,7 +132,18 @@ void gameOfLife(){
       if (grid[i][j].getAlive()){
         if (i > 0){
           if(triangleBirth(grid[i][j],grid[i-1][j],"E")){
-            
+            if (j < numCols-1){
+              if (!grid[i][j+1].getAlive()){
+                grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                grid[i][j+1].setRandColour();
+                grid[i][j+1].setRandRotation();
+              }
+              if (!grid[i-1][j+1].getAlive()){
+                grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                grid[i][j+1].setRandColour();
+                grid[i][j+1].setRandRotation();
+              }
+            }
           }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
             
           }
@@ -173,40 +184,85 @@ void gameOfLife(){
     }
   }
   
-  
-  
-  
-  
 }
 
-boolean triangleBirth(Square rightSquare, Square leftSquare, String direction){
+Square getParentSquare(Square[] parents){  
+  int rand = int(random(2));
+  return parents[rand];
+}
+
+
+
+
+boolean triangleBirth(Square firstSquare, Square backSquare, String direction){
   
-  color rightColour = color(0,0,0);
-  color leftColour = color(0,0,1);
+  color firstColour = color(0,0,0);
+  color backColour = color(0,0,1);
   switch(direction){
     case "N":
-      if ((rightSquare.getRotate() == 0 || rightSquare.getRotate() == 180) && (leftSquare.getRotate() == 90 || leftSquare.getRotate() == 270)){
-        if (rightSquare.getRotate() == 0){
-          rightColour = rightSquare.getPrimary();
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+        if (firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
         }else{
-          rightColour = rightSquare.getSecondary();
+          firstColour = firstSquare.getSecondary();
         }
         
-        if (leftSquare.getRotate() == 90){
-          leftColour = leftSquare.getPrimary();
+        if (backSquare.getRotate() == 90){
+          backColour = backSquare.getPrimary();
         }else{
-          leftColour = leftSquare.getSecondary();
+          backColour = backSquare.getSecondary();
         }
       }
       break;
     case "S":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if (firstSquare.getRotate() == 270){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }
+      }
       break;
     case "E":
+      if ((firstSquare.getRotate() == 90 || firstSquare.getRotate() == 270) && (backSquare.getRotate() == 0 || backSquare.getRotate() == 180)){
+        if (firstSquare.getRotate() == 90){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 180){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }
+      }
       break;
     case "W":
+      if ((firstSquare.getRotate() == 0 || firstSquare.getRotate() == 180) && (backSquare.getRotate() == 90 || backSquare.getRotate() == 270)){
+        if (firstSquare.getRotate() == 0){
+          firstColour = firstSquare.getPrimary();
+        }else{
+          firstColour = firstSquare.getSecondary();
+        }
+        
+        if (backSquare.getRotate() == 270){
+          backColour = backSquare.getPrimary();
+        }else{
+          backColour = backSquare.getSecondary();
+        }
+      }
       break;
   }
-  
+  if (firstColour == backColour){
+    return true;
+  }
   
   return false;
 }
@@ -337,7 +393,7 @@ void setUpGrid() {
       if (i >= topGap && i < numRows+topGap && j >= sideGap && j < numCols+sideGap){
         grid[i][j] = new Square(getSquare());
         grid[i][j].setRandRotation();
-        colourAssignment( grid[i][j].getPrimary(), grid[i][j].getSecondary(), grid[i][j].getStroke(), grid[i][j]);      
+        grid[i][j].setRandColour();     
       }else{
        grid[i][j] = new Square(getSquare()); 
        grid[i][j].kill();

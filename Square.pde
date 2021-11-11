@@ -105,6 +105,35 @@ class Square{
     int rand = int(random(4));
     rotation = (rand)*90;
   }
+  public void setRandColour(){
+    int[] rands = {-1, -1, -1};
+    rands[0] = int(random(3));
+    color tempPrimary = getColour(primary, secondary, stroke, rands[0]);
+    rands[1] = int(random(3));
+    while (rands[0] == rands[1]) {
+      rands[1] = int(random(3));
+    }
+    color tempSecondary = getColour(primary, secondary, stroke, rands[1]);
+    rands[2] = int(random(3));
+    while (rands[0] == rands[2] || rands[1] == rands[2]) {
+      rands[2] = int(random(3));
+    }
+    color tempStroke = getColour(primary, secondary, stroke, rands[2]);
+    primary = tempPrimary;
+    secondary = tempSecondary;
+    stroke = tempStroke;
+  }
+  private color getColour(color color1, color color2, color color3, int rand) {
+
+    if (rand == 0) {
+      return color1;
+    } else if (rand == 1) {
+      return color2;
+    } else if (rand == 2) {
+      return color3;
+    }
+    return color(246, 123, 79);
+  }
   public void setSize(float[] corner1, float[] corner2, float[] adjustments){
     firstTriangle.setSize(corner1[0]+adjustments[0],corner1[1]+adjustments[0], corner1[0]+adjustments[0],corner2[1]+adjustments[0],  corner2[0]+adjustments[0],corner1[1]+adjustments[0]);
     secondTriangle.setSize(corner2[0]+adjustments[1],corner2[1]+adjustments[1], corner1[0]+adjustments[1],corner2[1]+adjustments[1],  corner2[0]+adjustments[1],corner1[1]+adjustments[1]);
