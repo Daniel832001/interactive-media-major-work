@@ -139,12 +139,24 @@ void gameOfLife(){
                 grid[i][j+1].setRandRotation();
               }
               if (!grid[i-1][j+1].getAlive()){
-                grid[i][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
-                grid[i][j+1].setRandColour();
-                grid[i][j+1].setRandRotation();
+                grid[i-1][j+1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                grid[i-1][j+1].setRandColour();
+                grid[i-1][j+1].setRandRotation();
               }
             }
           }else if(triangleBirth(grid[i][j],grid[i-1][j],"W")){
+            if (j > 0){
+              if (!grid[i][j-1].getAlive()){
+                grid[i][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                grid[i][j-1].setRandColour();
+                grid[i][j-1].setRandRotation();
+              }
+              if (!grid[i-1][j-1].getAlive()){
+                grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i-1][j]}));
+                grid[i-1][j-1].setRandColour();
+                grid[i-1][j-1].setRandRotation();
+              }
+            }
             
           }
         }
