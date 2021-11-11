@@ -169,8 +169,31 @@ void gameOfLife(){
         //}
         if (j > 0){
          if(triangleBirth(grid[i][j],grid[i][j-1],"N")){
-           
+           if (i < numRows-1){
+              if (!grid[i+1][j].getAlive()){
+                grid[i+1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                grid[i+1][j].setRandColour();
+                grid[i+1][j].setRandRotation();
+              }
+              if (!grid[i+1][j-1].getAlive()){
+                grid[i+1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                grid[i+1][j-1].setRandColour();
+                grid[i+1][j-1].setRandRotation();
+              }
+            }
          }else if(triangleBirth(grid[i][j],grid[i][j-1],"S")){
+           if (i > 0){
+              if (!grid[i-1][j].getAlive()){
+                grid[i-1][j] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                grid[i-1][j].setRandColour();
+                grid[i-1][j].setRandRotation();
+              }
+              if (!grid[i-1][j-1].getAlive()){
+                grid[i-1][j-1] = new Square(getParentSquare(new Square[] {grid[i][j],grid[i][j-1]}));
+                grid[i-1][j-1].setRandColour();
+                grid[i-1][j-1].setRandRotation();
+              }
+            }
            
          }
         }
