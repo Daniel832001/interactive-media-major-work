@@ -231,7 +231,7 @@ boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
   }
   //println("Direction: "+direction,"main: "+mainColour,"other: "+otherColour);
   if (mainColour == otherColour){
-    return true;
+    //return true;
   }
   
   
@@ -241,43 +241,35 @@ boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
 boolean lineMatch(Square mainSquare, Square otherSquare,String direction){
 
   
-  //if(mainSquare.getRotate() == 0 || mainSquare.getRotate() == 180){
-  //  switch(direction){
-  //    case "NE":
-  //      if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
-  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
-  //          return true;            
-  //        }
-  //      }
-  //      break;
-  //    case "SW":
-  //      if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
-  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
-  //          return true;            
-  //        }
-  //      }
-  //      break;
-  //  }
-  //}
+  if(mainSquare.getRotate() == 0 || mainSquare.getRotate() == 180){
+    switch(direction){
+      case "NE":
+        if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
+          return true; 
+        }
+        break;
+      case "SW":
+        if(otherSquare.getRotate() == 0 || otherSquare.getRotate() == 180){
+          return true; 
+        }
+        break;
+    }
+  }
   
-  //if(mainSquare.getRotate() == 90 || mainSquare.getRotate() == 270){
-  //  switch(direction){
-  //    case "NW":
-  //      if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
-  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
-  //          return true;            
-  //        }
-  //      }      
-  //      break;
-  //    case "SE":
-  //      if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
-  //        if (mainSquare.getStroke() == otherSquare.getStroke()){
-  //          return true;            
-  //        }
-  //      }
-  //      break;
-  //  }
-  //}
+  if(mainSquare.getRotate() == 90 || mainSquare.getRotate() == 270){
+    switch(direction){
+      case "NW":
+        if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
+          return true; 
+        }      
+        break;
+      case "SE":
+        if(otherSquare.getRotate() == 90 || otherSquare.getRotate() == 270){
+          return true; 
+        }
+        break;
+    }
+  }
   
   return false; 
 }
