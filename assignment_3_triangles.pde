@@ -161,12 +161,14 @@ void draw() {
 
     selectionMenu(); 
     addButtonColours();
+  //move to grid view once selection is complete
   } else {
 
     //background(white);
     grid();
     timer += 1;
     
+    //wait 5 seconds for audience to view grid before beggining life cycle
     if ((timer > frameRate*5 || !first)){
         timer = 0;
         gameOfLife();
@@ -175,7 +177,7 @@ void draw() {
     }
     
     if (permaDead){
-      
+      //begin music playing
       if (music < 900 && music >= 0){
         stroke(150,150,150);
         strokeWeight(3);
@@ -195,6 +197,7 @@ void draw() {
         frequencyGlide13.setValue(getFrequency(12));
         frequencyGlide14.setValue(getFrequency(13));
         music++;
+      //turn off music when bar reaches the right side
       }else{
         music = -1;
         frequencyGlide1.setValue(0);
@@ -215,7 +218,7 @@ void draw() {
     }
   }
 }
-
+//determine the produced frequency of frequencyGlide(Row) based on the cross section of the grey bar and the centre diagona line of the square found at row,col
 float getFrequency(int row){
   
   //range of frequency/return value 100-800
@@ -239,7 +242,7 @@ float getFrequency(int row){
   
   return 0;
 }
-
+//rturns the column the moving grey bar is currently in
 int getCol(){
   int col = music/55;
   if (col > 15){
@@ -250,7 +253,7 @@ int getCol(){
 
 void gameOfLife(){
   
-  
+  //swap between square destruction and creation every rate seconds
   deathTimer += 1;
   if (deathTimer > frameRate*rate){
      die = false;
@@ -260,14 +263,14 @@ void gameOfLife(){
     deathTimer = 0;
   }
   
+  //if no more destruction or creation is happening life cycle is finished, used to move onto sound section
   if (deathTimer == 0){
     permaDead = true;    
   }
   
   
-  
+  //destroy non colour matching squares
   if (die){
-    //death
     for (int i=0; i<14; i++ ) {
       for (int j=0; j<16; j++ ) {
         boolean colourDie = true;
@@ -303,6 +306,7 @@ void gameOfLife(){
       
       }
     }
+  //create new squares
   }else{
   
     //birth
