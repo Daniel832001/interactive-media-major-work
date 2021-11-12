@@ -66,10 +66,37 @@ ControlP5 cp5;
 
 //audio
 AudioContext ac;
-WavePlayer wp;
+WavePlayer wp1;
+WavePlayer wp2;
+WavePlayer wp3;
+WavePlayer wp4;
+WavePlayer wp5;
+WavePlayer wp6;
+WavePlayer wp7;
+WavePlayer wp8;
+WavePlayer wp9;
+WavePlayer wp10;
+WavePlayer wp11;
+WavePlayer wp12;
+WavePlayer wp13;
+WavePlayer wp14;
 Gain g;
 Glide gainGlide;
-Glide frequencyGlide;
+Glide frequencyGlide1;
+Glide frequencyGlide2;
+Glide frequencyGlide3;
+Glide frequencyGlide4;
+Glide frequencyGlide5;
+Glide frequencyGlide6;
+Glide frequencyGlide7;
+Glide frequencyGlide8;
+Glide frequencyGlide9;
+Glide frequencyGlide10;
+Glide frequencyGlide11;
+Glide frequencyGlide12;
+Glide frequencyGlide13;
+Glide frequencyGlide14;
+
 
 
 
@@ -83,10 +110,52 @@ void setup() {
   noStroke();
   ac = new AudioContext();
   gainGlide = new Glide(ac, volume, 50);
-  frequencyGlide = new Glide(ac, 20, 50);
-  wp = new WavePlayer(ac,frequencyGlide,Buffer.SINE);
+  frequencyGlide1 = new Glide(ac, 0, 50);
+  frequencyGlide2 = new Glide(ac, 0, 50);
+  frequencyGlide3 = new Glide(ac, 0, 50);
+  frequencyGlide4 = new Glide(ac, 0, 50);
+  frequencyGlide5 = new Glide(ac, 0, 50);
+  frequencyGlide6 = new Glide(ac, 0, 50);
+  frequencyGlide7 = new Glide(ac, 0, 50);
+  frequencyGlide8 = new Glide(ac, 0, 50);
+  frequencyGlide9 = new Glide(ac, 0, 50);
+  frequencyGlide10 = new Glide(ac, 0, 50);
+  frequencyGlide11 = new Glide(ac, 0, 50);
+  frequencyGlide12 = new Glide(ac, 0, 50);
+  frequencyGlide13 = new Glide(ac, 0, 50);
+  frequencyGlide14 = new Glide(ac, 0, 50);
+  
+  wp1 = new WavePlayer(ac,frequencyGlide1,Buffer.SINE);
+  wp2 = new WavePlayer(ac,frequencyGlide2,Buffer.SINE);
+  wp3 = new WavePlayer(ac,frequencyGlide3,Buffer.SINE);
+  wp4 = new WavePlayer(ac,frequencyGlide4,Buffer.SINE);
+  wp5 = new WavePlayer(ac,frequencyGlide5,Buffer.SINE);
+  wp6 = new WavePlayer(ac,frequencyGlide6,Buffer.SINE);
+  wp7 = new WavePlayer(ac,frequencyGlide7,Buffer.SINE);
+  wp8 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  wp9 = new WavePlayer(ac,frequencyGlide7,Buffer.SINE);
+  wp10 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  wp11 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  wp12 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  wp13 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  wp14 = new WavePlayer(ac,frequencyGlide8,Buffer.SINE);
+  
   g = new Gain(ac,1,gainGlide);
-  g.addInput(wp);
+  g.addInput(wp1);
+  g.addInput(wp2);
+  g.addInput(wp3);
+  g.addInput(wp4);
+  g.addInput(wp5);
+  g.addInput(wp6);
+  g.addInput(wp7);
+  g.addInput(wp8);
+  g.addInput(wp9);
+  g.addInput(wp10);
+  g.addInput(wp11);
+  g.addInput(wp12);
+  g.addInput(wp13);
+  g.addInput(wp14);
+  
   ac.out.addInput(g);
   ac.start();
 }
@@ -111,15 +180,49 @@ void draw() {
     }
     
     if (permaDead){
+      
       stroke(150,150,150);
       strokeWeight(3);
       line(music,0,music,900);
-      frequencyGlide.setValue(mouseY);
+      frequencyGlide1.setValue(getFrequency(0));
+      frequencyGlide2.setValue(getFrequency(1));
+      frequencyGlide3.setValue(getFrequency(2));
+      frequencyGlide4.setValue(getFrequency(3));
+      frequencyGlide5.setValue(getFrequency(4));
+      frequencyGlide6.setValue(getFrequency(5));
+      frequencyGlide7.setValue(getFrequency(6));
+      frequencyGlide8.setValue(getFrequency(7));
+      frequencyGlide9.setValue(getFrequency(8));
+      frequencyGlide10.setValue(getFrequency(9));
+      frequencyGlide11.setValue(getFrequency(10));
+      frequencyGlide12.setValue(getFrequency(11));
+      frequencyGlide13.setValue(getFrequency(12));
+      frequencyGlide14.setValue(getFrequency(13));
       music++;
     }
   }
 }
 
+float getFrequency(int row){
+  
+  //range of frequency/return value 100-800
+  int col = getCol();
+  //grid[row][col];
+  if (grid[row][col].getAlive()){
+  
+  }
+  
+  
+  return 0;
+}
+
+int getCol(){
+  int col = music/55;
+  if (col > 15){
+    return 15;
+  }
+  return music/55;
+}
 
 void gameOfLife(){
   
