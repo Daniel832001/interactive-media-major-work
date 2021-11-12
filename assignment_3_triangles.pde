@@ -23,7 +23,6 @@ color pink = color(255, 0, 255);
 color black = color(0, 0, 0);
 color white = color(255, 255, 255);
 color grey = color(100, 100, 100);
-String colourMode = "primary";//options "primary","secondary","outline"
 
 //non-changeable parameters
 Square[] squares = new Square[4];
@@ -52,10 +51,6 @@ Button purpleButton;
 Button orangeButton;
 Button pinkButton;
 Button blackButton;
-
-Button primaryButton;
-Button secondaryButton;
-Button outlineButton;
 
 Button rotateButton;
 Button nextButton;
@@ -110,20 +105,20 @@ void setup() {
   noStroke();
   ac = new AudioContext();
   gainGlide = new Glide(ac, volume, 50);
-  frequencyGlide1 = new Glide(ac, 0, 50);
-  frequencyGlide2 = new Glide(ac, 0, 50);
-  frequencyGlide3 = new Glide(ac, 0, 50);
-  frequencyGlide4 = new Glide(ac, 0, 50);
-  frequencyGlide5 = new Glide(ac, 0, 50);
-  frequencyGlide6 = new Glide(ac, 0, 50);
-  frequencyGlide7 = new Glide(ac, 0, 50);
-  frequencyGlide8 = new Glide(ac, 0, 50);
-  frequencyGlide9 = new Glide(ac, 0, 50);
-  frequencyGlide10 = new Glide(ac, 0, 50);
-  frequencyGlide11 = new Glide(ac, 0, 50);
-  frequencyGlide12 = new Glide(ac, 0, 50);
-  frequencyGlide13 = new Glide(ac, 0, 50);
-  frequencyGlide14 = new Glide(ac, 0, 50);
+  frequencyGlide1 = new Glide(ac, 0);
+  frequencyGlide2 = new Glide(ac, 0);
+  frequencyGlide3 = new Glide(ac, 0);
+  frequencyGlide4 = new Glide(ac, 0);
+  frequencyGlide5 = new Glide(ac, 0);
+  frequencyGlide6 = new Glide(ac, 0);
+  frequencyGlide7 = new Glide(ac, 0);
+  frequencyGlide8 = new Glide(ac, 0);
+  frequencyGlide9 = new Glide(ac, 0);
+  frequencyGlide10 = new Glide(ac, 0);
+  frequencyGlide11 = new Glide(ac, 0);
+  frequencyGlide12 = new Glide(ac, 0);
+  frequencyGlide13 = new Glide(ac, 0);
+  frequencyGlide14 = new Glide(ac, 0);
   
   wp1 = new WavePlayer(ac,frequencyGlide1,Buffer.SINE);
   wp2 = new WavePlayer(ac,frequencyGlide2,Buffer.SINE);
@@ -181,24 +176,42 @@ void draw() {
     
     if (permaDead){
       
-      stroke(150,150,150);
-      strokeWeight(3);
-      line(music,0,music,900);
-      frequencyGlide1.setValue(getFrequency(0));
-      frequencyGlide2.setValue(getFrequency(1));
-      frequencyGlide3.setValue(getFrequency(2));
-      frequencyGlide4.setValue(getFrequency(3));
-      frequencyGlide5.setValue(getFrequency(4));
-      frequencyGlide6.setValue(getFrequency(5));
-      frequencyGlide7.setValue(getFrequency(6));
-      frequencyGlide8.setValue(getFrequency(7));
-      frequencyGlide9.setValue(getFrequency(8));
-      frequencyGlide10.setValue(getFrequency(9));
-      frequencyGlide11.setValue(getFrequency(10));
-      frequencyGlide12.setValue(getFrequency(11));
-      frequencyGlide13.setValue(getFrequency(12));
-      frequencyGlide14.setValue(getFrequency(13));
-      music++;
+      if (music < 900 && music >= 0){
+        stroke(150,150,150);
+        strokeWeight(3);
+        line(music,0,music,900);
+        frequencyGlide1.setValue(getFrequency(0));
+        frequencyGlide2.setValue(getFrequency(1));
+        frequencyGlide3.setValue(getFrequency(2));
+        frequencyGlide4.setValue(getFrequency(3));
+        frequencyGlide5.setValue(getFrequency(4));
+        frequencyGlide6.setValue(getFrequency(5));
+        frequencyGlide7.setValue(getFrequency(6));
+        frequencyGlide8.setValue(getFrequency(7));
+        frequencyGlide9.setValue(getFrequency(8));
+        frequencyGlide10.setValue(getFrequency(9));
+        frequencyGlide11.setValue(getFrequency(10));
+        frequencyGlide12.setValue(getFrequency(11));
+        frequencyGlide13.setValue(getFrequency(12));
+        frequencyGlide14.setValue(getFrequency(13));
+        music++;
+      }else{
+        music = -1;
+        frequencyGlide1.setValue(0);
+        frequencyGlide2.setValue(0);
+        frequencyGlide3.setValue(0);
+        frequencyGlide4.setValue(0);
+        frequencyGlide5.setValue(0);
+        frequencyGlide6.setValue(0);
+        frequencyGlide7.setValue(0);
+        frequencyGlide8.setValue(0);
+        frequencyGlide9.setValue(0);
+        frequencyGlide10.setValue(0);
+        frequencyGlide11.setValue(0);
+        frequencyGlide12.setValue(0);
+        frequencyGlide13.setValue(0);
+        frequencyGlide14.setValue(0);
+      }
     }
   }
 }
@@ -207,9 +220,20 @@ float getFrequency(int row){
   
   //range of frequency/return value 100-800
   int col = getCol();
+  println("current Row: "+row,"current Col: "+col);
+  int currentSquarePos = music - col*55;
   //grid[row][col];
   if (grid[row][col].getAlive()){
-  
+    float percent = currentSquarePos/55;
+    println("currentSquarePos: "+currentSquarePos);
+    float frequency = 700*percent;
+    println("frequency: "+frequency);
+    if (grid[row][col].getRotate() == 0 || grid[row][col].getRotate() == 180){
+      return frequency + 100;
+    }
+    if (grid[row][col].getRotate() == 90 || grid[row][col].getRotate() == 270){
+      return 800 - frequency;
+    }
   }
   
   
@@ -456,12 +480,12 @@ void gameOfLife(){
   }
   
 }
-
+//returns a random square from 1 of 2 parents, determines what colour scheme the newly created square will use
 Square getParentSquare(Square[] parents){  
   int rand = int(random(2));
   return parents[rand];
 }
-
+//if firstSqaure and backSquare create a diagonal line from their matching colours that would extend in direction "direction" return true, else return false
 boolean diagonalBirth(Square firstSquare, Square backSquare, String direction){
   
   color firstColour = color(0,0,0);
@@ -596,7 +620,8 @@ boolean diagonalBirth(Square firstSquare, Square backSquare, String direction){
   return false;
 }
 
-
+//if the orientation of 2 colour matching squares (firstSquare & backSquare where direction is the direciton a new square woulkd be created/aka the direction of the flat/non-diagonal side of the double trianle)
+//creates a single coloured triangle made up of 2 triangles(1 from each square) return true, else return false
 boolean triangleBirth(Square firstSquare, Square backSquare, String direction){
   
   color firstColour = color(0,0,0);
@@ -673,7 +698,7 @@ boolean triangleBirth(Square firstSquare, Square backSquare, String direction){
 
 
 
-
+//returns true if "mainSquare" shares a colour with "otherSquare" in the direction "direction", otehrwise return false
 boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
   
   color mainColour = color(0,0,0);
@@ -747,7 +772,7 @@ boolean colourMatch(Square mainSquare, Square otherSquare, String direction){
 
 
 
-
+//draws the first screen with all buttons, colour schemes and preview of the square
 void selectionMenu() {
   //inner line - top half
   pushMatrix();
@@ -788,6 +813,7 @@ void selectionMenu() {
   popMatrix();
 }
 
+//sets up the grid by placing a "numRow"*"numCol" grid in the centre of the screen of randomly assigned squares using the chosen colour schemes
 void setUpGrid() {
   int topGap = (14-numRows)/2;
   int sideGap =  (16-numCols)/2;
@@ -804,13 +830,13 @@ void setUpGrid() {
     }
   }
 }
-
+//returns a random square from the list of 4 squares the user selected a colour scheme for
 Square getSquare() {
   int rand = int(random(4));
   return squares[rand];
 }
 
-
+//displays the entire screen grid based on the squares saved in the grid 2d array, including dead (ie completely white) squares
 void grid() {
   //float leftSideStart = (900-numCols*50)/2;
   float leftSideStart = 25;
@@ -865,7 +891,7 @@ void grid() {
 }
 
 
-
+//randomly assigns the parameter square the 3 color paremters where each colour has to be used but where they are assigned (priamry triangle, line and secondary triangle) randomly
 void colourAssignment(color color1, color color2, color color3, Square square) {
   int[] rands = {-1, -1, -1};
   rands[0] = int(random(3));
@@ -882,6 +908,7 @@ void colourAssignment(color color1, color color2, color color3, Square square) {
   square.setOutline(getColour(color1, color2, color3, rands[2]));
 }
 
+//returns 1 of the 3 parameter colours based on the int paremete given
 color getColour(color color1, color color2, color color3, int rand) {
 
   if (rand == 0) {
@@ -895,7 +922,7 @@ color getColour(color color1, color color2, color color3, int rand) {
 }
 
 
-//BUTTONS
+//BUTTON METHODS
 void colour_scheme_1() {
   colourAssignment(blue, red, green, currentSquare);
 }
@@ -920,15 +947,6 @@ void colour_scheme_7() {
 void colour_scheme_8() {
   colourAssignment(pink, black, green, currentSquare);
 }
-void primary() {
-  colourMode = "primary";
-}
-void secondary() { 
-  colourMode = "secondary";
-}
-void outline() { 
-  colourMode = "outline";
-}
 void rotate() {
   currentSquare.setRotate(90);
 }
@@ -947,7 +965,7 @@ void next() {
   }
 }
 
-
+//resets the canvas for the grid page
 void reset() {  
   background(white);
   redButton.setVisible(false);
@@ -973,6 +991,7 @@ void reset() {
   setUpGrid();
 }
 
+//adds colours below each coulour scheme button
 void addButtonColours() {
 
   //colour scheme 1
@@ -1040,7 +1059,7 @@ void addButtonColours() {
   rect(700, 710, 100, 30);
 }
 
-
+//adds all buttons
 void addButtons() {
   redButton = cp5.addButton("colour_scheme_1")
     .setPosition(100, 430)
